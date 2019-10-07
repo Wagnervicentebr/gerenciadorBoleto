@@ -1,60 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+	   	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	   	layout:decorator="LayoutPadrao">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<title>Cadastro de boletos</title>
 </head>
-<body>
-
-	<nav class="navbar  navbar-light" style="background-color: #e3f2fd;">
-		<a class="navbar-brand" href="#"> <img src="/image/algaworks.png"
-			width="150" height="60" class="d-inline-block align-top"
-			alt="Algworks">
-		</a>
-	</nav>
-
-<form action="/boletos" method="POST">
-	<div class="card">
-		<h5 class="card-header">Novo titulo</h5>
-		<div class="card-body">
-
-			<div class="input-group flex-nowrap">
-				<div class="input-group-prepend">
-					<span class="input-group-text" id="addon-wrapping">Descriçao</span>
-				</div>
-				<input type="text" class="form-control desc" name="descricao"
-					aria-label="Descriçao" aria-describedby="addon-wrapping">
-			</div>
-			
-			<div class="input-group flex-nowrap">
-				<div class="input-group-prepend">
-					<span class="input-group-text" id="addon-wrapping">Data venc</span>
-				</div>
-				<input type="text" class="form-control" placeholder="" name="vencimento"
-					aria-label="Data de vencimento" aria-describedby="addon-wrapping">
-			</div>
-			
-			<div class="input-group flex-nowrap">
-				<div class="input-group-prepend">
-					<span class=" input-group-text" id="addon-wrapping">Valor</span>
-				</div>
-				<input type="text" class="form-control" placeholder="" name="valor"
-					aria-label="Valor" aria-describedby="addon-wrapping">
-			</div>
-			
-			<select class="custom-select custom-select-lg mb-3" name="status">
-			  <option value="PENDENTE">Pendente</option>
-			  <option value="RECEBIDO">Recebido</option>
-			</select>
 
 
+<section layout:fragment="conteudo">
 
-			<button type="submit" class="btn btn-primary">Salvar</button>
+	<form class="form-horizontal" action="/boletos" method="POST" th:object="${boleto}">
+	
+		<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+			<span th:text="${mensagem}">Titulo salvo com sucesso!</span>
 		</div>
-	</div>
-</form>
-	<script src="/javascript/bootstrap.min.js"></script>
-</body>
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="detailedError : ${#fields.detailedErrors()} ">
+				<span th:text="${detailedError.message}"></span>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+			<div class="clearfix">
+				<h3 class="panel-title titulo-panel">Cadastro de boletos</h3>
+				<a class="btn btn-link link-panel" href="/boletos">Listar boletos</a>
+			</div>
+			</div>
+			<div class="panel-body"></div>
+			<div class="form-group" th:classappend="${#fields.hasErrors('descricao')} ? has-error">
+				<label for="descricao" class="col-sm-2 control-label">Descrição
+				</label>
+				<div class="col-sm-4">
+					<input type="hidden" th:field="*{codBoleto}">
+					<input type="text" class="form-control" id="descricao" th:field="*{descricao}"/>
+				</div>
+			</div>
+			<div class="form-group" th:classappend="${#fields.hasErrors('vencimento')} ? has-error">
+				<label for="vencimento" class="col-sm-2 control-label">Data
+					de Vencimento </label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="vencimento" th:field="*{vencimento}"/>
+				</div>
+			</div>
+			<div class="form-group" th:classappend="${#fields.hasErrors('valor')} ? has-error">
+				<label for="valor" class="col-sm-2 control-label">Valor
+					 </label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="valor" th:field="*{valor}"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="status" class="col-sm-2 control-label">Status
+					 </label>
+				<div class="col-sm-2">
+					<select class="form-control" name="status">
+						<option th:each="status : ${todosStatus}" th:value="${status}"
+						th:text="${status.descricao}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-primary">Salvar</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+</section>
 </html>

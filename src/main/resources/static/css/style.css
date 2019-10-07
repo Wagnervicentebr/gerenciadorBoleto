@@ -1,9 +1,18 @@
-.navbar{padding:0px;}
-.navbar-brand{margin-left:8px;}
-.flex-nowrap{margin: 10px;}
-.card{margin: 50px 10px 0px 10px;}
-.card-body{ width: 60%;}
-.form-control desc{width: 80%;}
-.mb-3, .my-3{margin-left:9px;}
-.custom-select{height:42px;}
-.btn-primary{ margin-left: 18px;}
+
+body {
+	font-family: 'Roboto', sans-serif;
+}
+.panel-default{margin: 10px;}
+.btn-primary{margin-left: 0px;}
+.navbar-brand {margin: 10px;}  
+.navbar-brand>img{margin: -20px;margin-left: 5px;}
+
+.link-panel{float: right;}
+.titulo-panel{float: left; padding-top:5px; }
+
+@font-face{
+    font-family:'Glyphicons Halflings';
+    src:url(../fonts/glyphicons-halflings-regular.eot);
+    src:url(../fonts/glyphicons-halflings-regular.woff2);
+    src:url(../fonts/glyphicons-halflings-regular.woff);
+}

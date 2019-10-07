@@ -11,6 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
@@ -24,12 +29,17 @@ public class Boleto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer codBoleto;
 	
-	private String descriaco;
+	@NotEmpty(message =" Descrição não pode ser vazia")
+	@Size(min = 10, max = 60, message = "descrição obrigatoria! min 10, max 60 caracteres")
+	private String descricao;
 	
+	@NotNull(message = "Data de vencimento não pode ser nula")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date vencimento;
 	
+	@NotNull(message = "Valor não pode ser nulo")
+	@DecimalMin(value = "10", message = "Valor não pode ser menor que R$10,00" )
 	@NumberFormat(pattern = "#,##0.00")
 	private BigDecimal valor;
 	
@@ -37,10 +47,10 @@ public class Boleto {
 	private StatusBoleto status;
 	
 	public String getDescricao() {
-		return descriaco;
+		return descricao;
 	}
-	public void setDescricao(String descriaco) {
-		this.descriaco = descriaco;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 	public Date getVencimento() {
 		return vencimento;
@@ -65,6 +75,10 @@ public class Boleto {
 	}
 	public void setCodBoleto(Integer codBoleto) {
 		this.codBoleto = codBoleto;
+	}
+	
+	public boolean isPendente() {
+		return StatusBoleto.PENDENTE.equals(this.status); 
 	}
 	@Override
 	public int hashCode() {

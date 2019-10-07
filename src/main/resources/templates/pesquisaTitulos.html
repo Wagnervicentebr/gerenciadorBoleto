@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+	   	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	   	layout:decorator="LayoutPadrao">
+<head>
+	<title>Pesquisa de boletos</title>
+</head>
+		  	
+<section layout:fragment="conteudo">
+
+	<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+		<span th:text="${mensagem}"></span>
+	</div>	
+	<div class="panel panel-default">
+		  <div class="panel-heading">
+		  <div class="clearfix">
+		  		<h1 class="panel-title titulo-panel">Pesquisa de boletos</h1>
+		  		<a class="btn btn-link link-panel" href="/boletos/novo">Novo boleto</a>
+		  </div>
+		  </div>
+		  <div class="panel-body">
+		  	
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th class="text-center col-md-1">#</th>
+						<th class="col-md-2">Descriçao</th>
+						<th class="text-center col-md-2">Data de vencimento</th>
+						<th class="text-right col-md-2">Valor</th>
+						<th class="text-center col-md-2">Status</th>
+						<th class="col-md-1"></th>
+					</tr>
+			</thead>
+			<thead>
+				<tr th:each="boleto : ${listaBoletos}">
+					<td class="text-center" th:text="${boleto.codBoleto}"></td> 	
+					<td  th:text="${boleto.descricao}"></td> 	
+					<td class="text-center" th:text="${{boleto.vencimento}}"></td> 	
+					<td class="text-right" th:text="|R$ ${{boleto.valor}}|"></td> 	
+					<td class="text-center" >
+						<span class="label" th:text="${boleto.status}" th:classappend="${boleto.pendente ? 
+						'label-danger' : 'label-success' }"></span>
+					</td> 	
+					<td class="text-center">
+						<a class="btn btn-link btn-xs" th:href="@{/boletos/{id}(id=${boleto.codBoleto})}">
+						<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+						<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" th:attr="data-codigo=${boleto.codBoleto}, data-descricao=${boleto.descricao}" >
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						</a>
+					</td> 	
+				</tr>
+				<tr>
+					<td colspan="6" th:if="${#lists.isEmpty(listaBoletos)}">Nenhum titulo foi encontrado</td>
+				</tr>
+			</thead>
+			</table>
+			<div class="modal fade" tabindex="-1" id="confirmacaoExclusaoModal" role="dialog" data-keyboard="false" data-backdrop="static">	
+				<div class="modal-dialog">
+					<form action="" method="POST" data-url="/boletos">
+						<input type="hidden" name="_method" value="DELETE" />
+						<div class="modal-content">							
+							<div class="modal-header">
+								<h4>Tem certeza que deseja excluir ?</h4>
+							</div>
+							<div class="modal-body">
+								<span class="modal-title">Tem certeza que deseja apagar o titulo?</span>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+								<button type="submit" class="btn btn-primary">Excluir</button>
+							</div>
+						</div>
+					</form>				
+				</div>
+			</div>	
+		</div>
+	</div>
+</section>
+	
+
+</html>
