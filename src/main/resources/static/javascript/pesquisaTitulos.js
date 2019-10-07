@@ -18,3 +18,10 @@ $('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
 	
 });
 
+
+$(function(){
+	
+	$('[rel="tooltips"]').tooltip();
+	
+});
+

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -53,10 +54,17 @@ public class CadastroController {
 			return "cadastro";
 		}
 		
-		boletoRepository.save(boleto);
+		try {
+			
+			boletoRepository.save(boleto);
+			
+			attributes.addFlashAttribute("mensagem", "Boleto cadastrado com sucesso !");
+			return "redirect:/boletos/novo";
+		}catch (DataIntegrityViolationException e) {
+			error.rejectValue("vencimento", null, "Data com formato incorreto");
+			return "cadastro";
+		}
 		
-		attributes.addFlashAttribute("mensagem", "Boleto cadastrado com sucesso !");
-		return "redirect:/boletos/novo";
 	}
 	
 	@RequestMapping("{codBoleto}")
